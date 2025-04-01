@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SidebarTrigger } from './LeftSidebar';
+import WelcomeModal from './WelcomeModal';
 
 const UserProfilePage = () => {
   const [activeTab, setActiveTab] = useState('education');
@@ -10,6 +11,7 @@ const UserProfilePage = () => {
   const [fieldOfStudy, setFieldOfStudy] = useState('');
   const [additionalPreferences, setAdditionalPreferences] = useState('');
   const [showSavedAlert, setShowSavedAlert] = useState(false);
+  const [showNotesModal, setShowNotesModal] = useState(false);
   const navigate = useNavigate();
 
   const learningStyles = [
@@ -71,7 +73,10 @@ const UserProfilePage = () => {
 
       if (response.ok) {
         setShowSavedAlert(true);
-        setTimeout(() => setShowSavedAlert(false), 3000);
+        setTimeout(() => {
+          setShowSavedAlert(false);
+          setShowNotesModal(true);
+        }, 2000);
       }
     } catch (error) {
       console.error('Error connecting to the server:', error);
@@ -239,6 +244,17 @@ const UserProfilePage = () => {
           <div className="fixed bottom-6 right-6 bg-[#E5E5E5] text-gray-900 px-4 py-2 rounded-md shadow-lg border border-[#CCCCCC] transition-opacity duration-500 text-sm">
             Changes saved successfully
           </div>
+        )}
+
+        {/* Notes Tutorial Modal */}
+        {showNotesModal && (
+          <WelcomeModal 
+            initialStep="notes"
+            onClose={() => {
+              setShowNotesModal(false);
+              navigate('/notes');
+            }} 
+          />
         )}
       </div>
     </div>
